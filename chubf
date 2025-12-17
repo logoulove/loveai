@@ -1,0 +1,17 @@
+
+import transformers
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# 加载Qwen3-Coder模型
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-Coder-480B-A35B-Instruct")
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-Coder-480B-A35B-Instruct")
+
+def generate_code(prompt, max_length=128000):
+    inputs = tokenizer(prompt, return_tensors="pt")
+    outputs = model.generate(inputs.input_ids, max_length=max_length)
+    return tokenizer.decode(outputs, skip_special_tokens=True)
+
+if __name__ == "__main__":
+    prompt = "请用Python实现一个线程安全的单例模式"
+    code = generate_code(prompt)
+    print(code)
